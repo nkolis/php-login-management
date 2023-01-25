@@ -2,6 +2,8 @@
 
 namespace ProgrammerZamanNow\Belajar\PHP\MVC\App;
 
+use ProgrammerZamanNow\Belajar\PHP\MVC\Config\BaseURL;
+
 class View
 {
 
@@ -10,5 +12,11 @@ class View
     require __DIR__ . '/../View/header.php';
     require __DIR__ . '/../View/' . $view . '.php';
     require __DIR__ . '/../View/footer.php';
+  }
+
+  public static function redirect($url)
+  {
+    header('Location: ' . BaseURL::get() . '/' . $url);
+    exit();
   }
 }
