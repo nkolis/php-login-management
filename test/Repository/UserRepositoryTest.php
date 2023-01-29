@@ -9,9 +9,12 @@ use ProgrammerZamanNow\Belajar\PHP\MVC\Domain\User;
 class UserRepositoryTest extends TestCase
 {
   private UserRepository $userRepository;
+  private SessionRepository $sessionRepository;
 
   public function setUp(): void
   {
+    $this->sessionRepository = new SessionRepository(Database::getConnection());
+    $this->sessionRepository->deleteAll();
     $this->userRepository = new UserRepository(Database::getConnection());
     $this->userRepository->deleteAll();
   }
@@ -36,5 +39,26 @@ class UserRepositoryTest extends TestCase
   {
     $user = $this->userRepository->findById('Nofound');
     self::assertNull($user);
+  }
+
+  public function testUpdate()
+  {
+    $user = new User;
+    $user->id = 'nkholis';
+    $user->name = 'Kholis';
+    $user->password = 'rahasia';
+
+    $this->userRepository->save($user);
+
+    $user->name = 'Nur kholis';
+    $user->password = 'test123';
+
+    $this->userRepository->update($user);
+
+    $result = $this->userRepository->findById($user->id);
+
+    self::assertEquals($user->id, $result->id);
+    self::assertEquals($user->name, $result->name);
+    self::assertEquals($user->password, $result->password);
   }
 }
